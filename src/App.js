@@ -9,12 +9,13 @@ const logs = document.getElementById("logs");
 const clearLogBtn = document.getElementById("clearlogs");
 clearLogBtn.onclick = (e) => {
   e.preventDefault();
+  // console.clear();
   logs.innerHTML = "";
 };
 
 const LOG = (newLog) => {
-  if (logs.lastChild !== null && logs.lastChild.innerHTML === newLog.toString())
-    return;
+  // if (logs.lastChild !== null && logs.lastChild.innerHTML === newLog.toString())
+  //   return;
   let li = document.createElement("li");
   let newId = nanoid(7);
   li.id = newId;
@@ -23,10 +24,26 @@ const LOG = (newLog) => {
   logs.append(li);
   setTimeout(() => {
     let li = document.getElementById(newId);
-    li.style.backgroundColor = "#ffffff";
+    if (li) li.style.backgroundColor = "#ffffff";
   }, 1500);
 };
 
+// Extending/Redefining the default console.log (React rendering ways)
+function FromConsole() {
+  let fromConsole =
+    typeof keys === "function" &&
+    keys.toString().indexOf("Command Line API") !== -1;
+  return fromConsole;
+}
+
+const pureConsoleLog = console.log;
+
+console.log = (log) => {
+  pureConsoleLog(log);
+  if (!FromConsole()) LOG(log);
+};
+
+// COMPONENT A
 class CompA extends Component {
   // static Log = LOG;
 
@@ -34,40 +51,49 @@ class CompA extends Component {
     super(props);
     this.state = {
       a: 0,
+      b: props.num,
       mountB: true,
     };
-    this.log = LOG;
-    this.log("[Comp A] : Constructor...");
-    // console.log("[Comp A] : Constructor...");
+    // this.log = LOG;
+    // this.log("[Comp A] : Constructor...");
+    console.log("[Comp A] : Constructor...");
   }
 
   static getDerivedStateFromProps(props, state) {
-    LOG("[Comp A] : static getDerivedStateFromProps called...");
+    // LOG("[Comp A] : static getDerivedStateFromProps called...");
+    console.log("[Comp A] : static getDerivedStateFromProps called...");
     return { derivedState: props };
   }
 
   getSnapshotBeforeUpdate(p, ps) {
-    this.log("[Comp A] : getSnapshotBeforeUpdate Called...");
-    console.log(p, ps);
+    // this.log("[Comp A] : getSnapshotBeforeUpdate Called...");
+    // console.log(p, ps);
+    console.log("[Comp A] : getSnapshotBeforeUpdate Called...");
+    pureConsoleLog(p, ps);
     return true;
   }
 
   componentDidMount() {
-    this.log("[Comp A] : Mounted");
+    // this.log("[Comp A] : Mounted");
+    console.log("[Comp A] : Mounted");
   }
 
   shouldComponentUpdate(p, n) {
-    this.log("[Comp A] : shouldComponentUpdate Called...");
-    console.log(p, n);
+    // this.log("[Comp A] : shouldComponentUpdate Called...");
+    // console.log(p, n);
+    console.log("[Comp A] : shouldComponentUpdate Called...");
+    pureConsoleLog(p, n);
     return true;
   }
 
   componentDidUpdate() {
-    this.log("[Comp A] : Updated");
+    // this.log("[Comp A] : Updated");
+    console.log("[Comp A] : Updated");
   }
 
   componentWillUnmount() {
-    this.log("[Comp A] : Unmounting...");
+    // this.log("[Comp A] : Unmounting...");
+    console.log("[Comp A] : Unmounting...");
   }
 
   inc = () => {
@@ -83,8 +109,16 @@ class CompA extends Component {
     });
   };
 
+  changeProps = () => {
+    let prevState = this.state.b;
+    this.setState({
+      b: prevState + 1,
+    });
+  };
+
   render() {
-    this.log("[Comp A] : Rendering...");
+    // this.log("[Comp A] : Rendering...");
+    console.log("[Comp A] : Rendering...");
     return (
       <div className={[styles.comp, styles.compA].join(" ")}>
         <h3>COMPONENT A</h3>
@@ -94,56 +128,70 @@ class CompA extends Component {
         <button onClick={this.mountUnmountB}>
           {this.state.mountB ? "Unmount B" : "Mount B"}
         </button>
+        <button onClick={this.changeProps}>
+          Increment State "b" (Prop "c" of C)
+        </button>
         <div className={styles.compContainer}>
           {this.state.mountB && <CompB a={this.state.a} />}
-          <FuncC {...this.props} />
+          <FuncC c={this.state.b} {...this.props} />
         </div>
       </div>
     );
   }
 }
 
+// COMPONENT B
 class CompB extends Component {
   constructor(props) {
     super(props);
     this.state = {
       b: "Sample text",
     };
-    this.log = LOG;
-    this.log("[Comp B] : Constructor...");
+    // this.log = LOG;
+    // this.log("[Comp B] : Constructor...");
+    console.log("[Comp B] : Constructor...");
   }
 
   static getDerivedStateFromProps(props, state) {
-    LOG("[Comp B] : static getDerivedStateFromProps called...");
+    // LOG("[Comp B] : static getDerivedStateFromProps called...");
+    console.log("[Comp B] : static getDerivedStateFromProps called...");
     return null;
   }
 
   getSnapshotBeforeUpdate(p, ps) {
-    this.log("[Comp B] : getSnapshotBeforeUpdate Called...");
-    console.log(p, ps);
+    // this.log("[Comp B] : getSnapshotBeforeUpdate Called...");
+    // console.log(p, ps);
+    console.log("[Comp B] : getSnapshotBeforeUpdate Called...");
+    pureConsoleLog(p, ps);
     return true;
   }
 
   componentDidMount() {
-    this.log("[Comp B] : Mounted");
+    // this.log("[Comp B] : Mounted");
+    console.log("[Comp B] : Mounted");
   }
 
   shouldComponentUpdate(p, n) {
-    this.log("[Comp B] : shouldComponentUpdate Called...");
-    console.log(p, n);
+    // this.log("[Comp B] : shouldComponentUpdate Called...");
+    // console.log(p, n);
+    console.log("[Comp B] : shouldComponentUpdate Called...");
+    pureConsoleLog(p, n);
     return true;
   }
 
   componentDidUpdate() {
-    this.log("[Comp B] : Updated");
+    // this.log("[Comp B] : Updated");
+    console.log("[Comp B] : Updated");
   }
 
   componentWillUnmount() {
-    this.log("[Comp B] : Unmounting...");
+    // this.log("[Comp B] : Unmounting...");
+    console.log("[Comp B] : Unmounting...");
   }
 
   render() {
-    this.log("[Comp B] : Rendering...");
+    // this.log("[Comp B] : Rendering...");
+    console.log("[Comp B] : Rendering...");
     const { comp, compB } = styles;
     return (
       <div className={[comp, compB].join(" ")}>
@@ -155,22 +203,27 @@ class CompB extends Component {
   }
 }
 
+// FUNCTIONAL C
 const FuncC = (props) => {
   const { comp, func } = styles;
-  const log = LOG;
-
-  log("[Func C] : Rendering...");
+  // const log = LOG;
 
   useEffect(() => {
-    // log("[Func C] : Mounted");
+    // log("[Func C] : (from useEffect) Mounted (Deferred)");
+    console.log("[Func C] : (from useEffect) Mounted (Deferred)");
     return () => {
-      log("[Func C] : Unmounting...");
+      // log("[Func C] : (from useEffect) Unmounting...");
+      console.log("[Func C] : (from useEffect) Unmounting...");
     };
   }, []);
 
-  // useEffect(() => {
-  //   log("[Func C] : Updating...");
-  // });
+  useEffect(() => {
+    // log("[Func C] : (from useEffect) Updated (Deferred)");
+    console.log("[Func C] : (from useEffect) Updated (Deferred)");
+  }, [props.c]);
+
+  // log("[Func C] : Rendering...");
+  console.log("[Func C] : Rendering...");
   return (
     <div className={[comp, func].join(" ")}>
       <h3>FUNCTIONAL C</h3>
@@ -184,6 +237,11 @@ const App = () => {
   const remountA = () => {
     setMountA((prev) => !prev);
   };
+  // useEffect(() => {
+  //   return () => {
+  //     console.log = pureConsoleLog;
+  //   };
+  // });
   return (
     <>
       {/* <div className={styles.githubImgContainer}>
