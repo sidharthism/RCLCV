@@ -1,10 +1,9 @@
 {
-  "name": "react",
+  "name": "rclcv",
   "version": "1.0.0",
-  "description": "React example starter project",
+  "description": "React Component Life Cycle Visualizer",
   "keywords": [
-    "react",
-    "starter"
+    "rclcv"
   ],
   "main": "src/index.js",
   "dependencies": {
