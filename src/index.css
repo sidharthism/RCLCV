@@ -1,0 +1,64 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  font-family: "Trebuchet MS", sans-serif !important;
+  min-height: 90vh;
+  min-width: 1024px;
+  padding: 1rem;
+  display: flex;
+  overflow: hidden;
+  justify-content: space-evenly;
+  /* position: relative; */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 1rem;
+}
+
+p {
+  font-size: 1rem;
+  text-align: left;
+  background-color: #c7c7c7;
+  padding: 0.7rem;
+}
+
+li {
+  padding: 0.37rem 0.23rem;
+  background-color: #c7c7c7;
+  transition: background-color 2.3s ease-out;
+}
+
+.logs {
+  min-width: 370px;
+  text-align: center;
+  border: 1px solid #828282;
+  padding: 1rem;
+}
+
+.logs ol {
+  text-align: left;
+  height: 600px;
+  overflow: auto;
+}
+
+.logs-header {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.logs-header button {
+  margin: 0.7rem;
+}
+
+@media screen and (max-width: 1024px) {
+  .logs {
+    margin-left: 1rem;
+  }
+}
