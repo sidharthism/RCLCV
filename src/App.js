@@ -23,7 +23,6 @@ const LOG = (newLog) => {
   logs.append(li);
   setTimeout(() => {
     let li = document.getElementById(newId);
-    // console.log(li.sty, newId);
     li.style.backgroundColor = "#ffffff";
   }, 1500);
 };
@@ -91,7 +90,7 @@ class CompA extends Component {
         <h3>COMPONENT A</h3>
         <p>Props : {JSON.stringify(this.props, null, 2)}</p>
         <p>State : {JSON.stringify(this.state, null, 2)}</p>
-        <button onClick={this.inc}>Increment</button>
+        <button onClick={this.inc}>Increment State "a"</button>
         <button onClick={this.mountUnmountB}>
           {this.state.mountB ? "Unmount B" : "Mount B"}
         </button>
@@ -190,7 +189,9 @@ const App = () => {
       {/* <div className={styles.githubImgContainer}>
         <img src={githubImg} alt="" />
       </div> */}
-      <div className={styles.githubContainer}>Github</div>
+      <a href="https://github.com/sidharthism/RCLCV" target="_blank">
+        <div className={styles.githubContainer}>Github</div>
+      </a>
       <div className={styles.header}>
         <h2 className={styles.headerText}>
           React Component Life Cycle Visualizer
