@@ -26,6 +26,7 @@ const LOG = (newLog) => {
     let li = document.getElementById(newId);
     if (li) li.style.backgroundColor = "#ffffff";
   }, 1500);
+  logs.scrollTop = logs.scrollHeight;
 };
 
 // Extending/Redefining the default console.log (React rendering ways)
