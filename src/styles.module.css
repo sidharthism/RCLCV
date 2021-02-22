@@ -1,7 +1,7 @@
 .App {
   text-align: center;
-  min-width: 600px;
-  min-height: 516px;
+  min-width: 659.88px; /* 600px */
+  min-height: 516.15px;
 }
 
 .githubContainer {
@@ -41,7 +41,7 @@
 
 .compContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly; /* space-between */
 }
 
 .compA {
@@ -79,6 +79,7 @@ button:active {
 
 .footer {
   padding: 0.7rem; /* 1 rem */
+  margin-top: 1rem;
 }
 
 .footerText {
@@ -97,7 +98,12 @@ button:active {
 
 @media screen and (max-width: 1024px) {
   .App {
-    min-height: 500px;
+    min-height: 534.55px; /* 500px */
+    min-width: 600px;
+  }
+
+  .compA {
+    margin-bottom: 0;
   }
 
   hr {

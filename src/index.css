@@ -57,6 +57,10 @@ li {
   justify-content: space-evenly;
 }
 
+.logs-header h3 {
+  margin-top: 1rem;
+}
+
 .logs-header button {
   margin: 0.7rem;
 }
