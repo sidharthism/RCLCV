@@ -9,7 +9,7 @@ body {
   min-width: 1024px;
   padding: 1rem;
   display: flex;
-  overflow: hidden;
+  /* overflow: hidden; */
   justify-content: space-evenly;
   /* position: relative; */
 }
@@ -20,6 +20,10 @@ h3,
 h4,
 h5 {
   margin: 1rem;
+}
+
+h3 {
+  margin-top: 0.28rem;
 }
 
 p {

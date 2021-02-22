@@ -54,6 +54,7 @@ class CompA extends Component {
       a: 0,
       b: props.num,
       mountB: true,
+      mountC: true,
     };
     // this.log = LOG;
     // this.log("[Comp A] : Constructor...");
@@ -76,7 +77,7 @@ class CompA extends Component {
 
   componentDidMount() {
     // this.log("[Comp A] : Mounted");
-    console.log("[Comp A] : Mounted");
+    console.log("[Comp A] : (componentDidMount) Mounted");
   }
 
   shouldComponentUpdate(p, n) {
@@ -89,37 +90,49 @@ class CompA extends Component {
 
   componentDidUpdate() {
     // this.log("[Comp A] : Updated");
-    console.log("[Comp A] : Updated");
+    console.log("[Comp A] : (componentDidUpdate) Updated");
   }
 
   componentWillUnmount() {
     // this.log("[Comp A] : Unmounting...");
-    console.log("[Comp A] : Unmounting...");
+    console.log("[Comp A] : (componentWillUnmount) Unmounting...");
   }
 
   inc = () => {
-    let prevState = this.state.a;
-    this.setState({
-      a: prevState + 1,
+    this.setState(({ a }) => {
+      return {
+        a: a + 1,
+      };
     });
   };
 
   mountUnmountB = () => {
-    this.setState({
-      mountB: !this.state.mountB,
+    this.setState(({ mountB }) => {
+      return {
+        mountB: !mountB,
+      };
+    });
+  };
+
+  mountUnmountC = () => {
+    this.setState(({ mountC }) => {
+      return {
+        mountC: !mountC,
+      };
     });
   };
 
   changeProps = () => {
-    let prevState = this.state.b;
-    this.setState({
-      b: prevState + 1,
+    this.setState(({ b }) => {
+      return {
+        b: b + 1,
+      };
     });
   };
 
   render() {
     // this.log("[Comp A] : Rendering...");
-    console.log("[Comp A] : Rendering...");
+    console.log("[Comp A] : (render) Rendering...");
     return (
       <div className={[styles.comp, styles.compA].join(" ")}>
         <h3>COMPONENT A</h3>
@@ -129,12 +142,15 @@ class CompA extends Component {
         <button onClick={this.mountUnmountB}>
           {this.state.mountB ? "Unmount B" : "Mount B"}
         </button>
+        <button onClick={this.mountUnmountC}>
+          {this.state.mountC ? "Unmount C" : "Mount C"}
+        </button>
         <button onClick={this.changeProps}>
           Increment State "b" (Prop "c" of C)
         </button>
         <div className={styles.compContainer}>
           {this.state.mountB && <CompB a={this.state.a} />}
-          <FuncC c={this.state.b} {...this.props} />
+          {this.state.mountC && <FuncC c={this.state.b} {...this.props} />}
         </div>
       </div>
     );
@@ -146,7 +162,8 @@ class CompB extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      b: "Sample text",
+      //b: "Sample text",
+      bVal: 0,
     };
     // this.log = LOG;
     // this.log("[Comp B] : Constructor...");
@@ -169,7 +186,7 @@ class CompB extends Component {
 
   componentDidMount() {
     // this.log("[Comp B] : Mounted");
-    console.log("[Comp B] : Mounted");
+    console.log("[Comp B] : (componentDidMount) Mounted");
   }
 
   shouldComponentUpdate(p, n) {
@@ -182,23 +199,30 @@ class CompB extends Component {
 
   componentDidUpdate() {
     // this.log("[Comp B] : Updated");
-    console.log("[Comp B] : Updated");
+    console.log("[Comp B] : (componentDidUpdate) Updated");
   }
 
   componentWillUnmount() {
     // this.log("[Comp B] : Unmounting...");
-    console.log("[Comp B] : Unmounting...");
+    console.log("[Comp B] : (componentWillUnmount) Unmounting...");
   }
+
+  changeVal = () => {
+    this.setState(({ bVal }) => {
+      return { bVal: bVal + 1 };
+    });
+  };
 
   render() {
     // this.log("[Comp B] : Rendering...");
-    console.log("[Comp B] : Rendering...");
+    console.log("[Comp B] : (render) Rendering...");
     const { comp, compB } = styles;
     return (
       <div className={[comp, compB].join(" ")}>
-        <h3>Component B</h3>
+        <h3>COMPONENT B</h3>
         <p>Props : {JSON.stringify(this.props, null, 2)}</p>
         <p>State : {JSON.stringify(this.state, null, 2)}</p>
+        <button onClick={this.changeVal}>Change "bVal"</button>
       </div>
     );
   }
@@ -207,21 +231,27 @@ class CompB extends Component {
 // FUNCTIONAL C
 const FuncC = (props) => {
   const { comp, func } = styles;
+  const [cVal, setCVal] = useState({ cVal: 0 });
   // const log = LOG;
 
   useEffect(() => {
     // log("[Func C] : (from useEffect) Mounted (Deferred)");
-    console.log("[Func C] : (from useEffect) Mounted (Deferred)");
+    console.log("[Func C] : (useEffect []) Mounted (Deferred)");
     return () => {
       // log("[Func C] : (from useEffect) Unmounting...");
-      console.log("[Func C] : (from useEffect) Unmounting...");
+      console.log("[Func C] : (useEffect []) Unmounting...");
     };
   }, []);
 
   useEffect(() => {
     // log("[Func C] : (from useEffect) Updated (Deferred)");
-    console.log("[Func C] : (from useEffect) Updated (Deferred)");
-  }, [props.c]);
+    console.log("[Func C] : (useEffect [props.c, cVal]) Updated (Deferred)");
+  }, [props.c, cVal]);
+
+  useEffect(() => {
+    // log("[Func C] : (from useEffect) Updated (Deferred)");
+    console.log("[Func C] : (useEffect) Updated (Deferred)");
+  });
 
   // log("[Func C] : Rendering...");
   console.log("[Func C] : Rendering...");
@@ -229,6 +259,16 @@ const FuncC = (props) => {
     <div className={[comp, func].join(" ")}>
       <h3>FUNCTIONAL C</h3>
       <p>Props : {JSON.stringify(props, null, 2)}</p>
+      <p>State : {JSON.stringify(cVal, null, 2)}</p>
+      <button
+        onClick={() =>
+          setCVal(({ cVal }) => {
+            return { cVal: cVal + 1 };
+          })
+        }
+      >
+        Change "cVal"
+      </button>
     </div>
   );
 };
